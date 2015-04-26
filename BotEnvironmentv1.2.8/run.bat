@@ -1,0 +1,1 @@
+java -cp BotEnvironment.jar;.; BotEnvironment.BotEnvironment

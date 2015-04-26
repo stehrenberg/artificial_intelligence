@@ -1,0 +1,7 @@
+overall search/movement cost...
+* BSF = 370 / 580
+* DSF = 275 / 580
+
+275/370 = 74,3%
+
+Overall fields within the map = 75

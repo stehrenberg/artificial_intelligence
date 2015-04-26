@@ -1,0 +1,1 @@
+java -cp .;WumpusEnvironment.jar BotEnvironment.WumpusEnvironment

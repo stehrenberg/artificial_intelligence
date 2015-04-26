@@ -1,0 +1,62 @@
+TILE_WIDTH          16
+TILE_HEIGHT         16
+MAXIMUM_COST            5
+SEARCH_COST         1
+TURN_COST           0
+MOVE_COST           20
+NUMBER_OF_SEARCHES      4
+SEARCH              Breadth_First_Search
+SEARCH              Lowest_Cost_First_Search
+SEARCH              Greedy_Best_First_Search
+SEARCH              A*_Search
+CHAR_START          S
+CHAR_GOAL           G
+CHAR_WALL           X
+CHAR_SPACE          -
+CHAR_NORTHWESTERN_BOUNDARY  /
+CHAR_NORTHERN_BOUNDARY      =
+CHAR_NORTHEASTERN_BOUNDARY  \\
+CHAR_WESTERN_BOUNDARY       |
+CHAR_EASTERN_BOUNDARY       |
+CHAR_SOUTHWESTERN_BOUNDARY  \\
+CHAR_SOUTHERN_BOUNDARY      =
+CHAR_SOUTHEASTERN_BOUNDARY  /
+COLOR_DEFAULT           255 227 171
+COLOR_VIEWED            190 165 116
+COLOR_EVALUATED         165 140 91
+COLOR_UNSEEN            0   0   0
+COLOR_TRAVELED          98  88  68
+COLOR_SEARCH            120 110 90
+IMAGE_DEFAULT           images/searchbot/default.gif
+IMAGE_VIEWED            images/searchbot/viewed.gif
+IMAGE_EVALUATED         images/searchbot/seen.gif
+IMAGE_UNSEEN            images/searchbot/unseen.gif
+IMAGE_TRAVELED          images/searchbot/traveled.gif
+IMAGE_BOT_NORTH         images/searchbot/bot_north.gif
+IMAGE_BOT_EAST          images/searchbot/bot_east.gif
+IMAGE_BOT_SOUTH         images/searchbot/bot_south.gif
+IMAGE_BOT_WEST          images/searchbot/bot_west.gif
+IMAGE_SEARCH            images/searchbot/search.gif
+IMAGE_START         images/searchbot/start.gif
+IMAGE_GOAL          images/searchbot/goal.gif
+IMAGE_WALL          images/searchbot/wall.gif
+IMAGE_SPACE         images/searchbot/space.gif
+IMAGE_AFTER_SPACE       images/searchbot/after_space.gif
+IMAGE_COST          1   images/searchbot/cost1.gif
+IMAGE_COST          2   images/searchbot/cost2.gif
+IMAGE_COST          3   images/searchbot/cost3.gif
+IMAGE_COST          4   images/searchbot/cost4.gif
+IMAGE_COST          5   images/searchbot/cost5.gif
+IMAGE_AFTER_COST        1   images/searchbot/after_cost1.gif
+IMAGE_AFTER_COST        2   images/searchbot/after_cost2.gif
+IMAGE_AFTER_COST        3   images/searchbot/after_cost3.gif
+IMAGE_AFTER_COST        4   images/searchbot/after_cost4.gif
+IMAGE_AFTER_COST        5   images/searchbot/after_cost5.gif
+IMAGE_NORTHWESTERN_BOUNDARY images/searchbot/boundary_northwestern.gif
+IMAGE_NORTHERN_BOUNDARY     images/searchbot/boundary_northern.gif
+IMAGE_NORTHEASTERN_BOUNDARY images/searchbot/boundary_northeastern.gif
+IMAGE_WESTERN_BOUNDARY      images/searchbot/boundary_western.gif
+IMAGE_EASTERN_BOUNDARY      images/searchbot/boundary_eastern.gif
+IMAGE_SOUTHWESTERN_BOUNDARY images/searchbot/boundary_southwestern.gif
+IMAGE_SOUTHERN_BOUNDARY     images/searchbot/boundary_southern.gif
+IMAGE_SOUTHEASTERN_BOUNDARY images/searchbot/boundary_southeastern.gif

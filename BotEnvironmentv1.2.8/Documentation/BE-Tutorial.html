@@ -1,0 +1,1155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- This file is used to adapt the files to the specific settings, --><!-- like course name and number, quarter, etc.  --><!-- First get the general settings  --><!-- This file is used to adapt the files to the specific settings, --><!-- like course name and number, quarter, etc.  --><!-- Variable Settings --><!-- Just for testing: --><!-- <EM>FJK Settings Executed!</EM> --><!-- <EM>FJK Settings Executed!</EM> --><!-- Course-specific variable settings --><!-- Just for testing: --><!-- <EM>480 Settings Executed!</EM> -->
+ 
+  
+  
+  <link rel="STYLESHEET" href="FJK.css" type="text/css">
+<!--   <LINK REL="STYLESHEET" HREF="css/480.css" TYPE="text/css"> -->
+
+  
+  <title>CPE/CSC 480-F05 Artificial Intelligence</title>
+</head>
+
+
+<body>
+
+<h1>Making an Agent for the Bot Environment</h1>
+
+
+    
+<p>The Bot Environment is designed for easy creation of agents. This tutorial 
+  will instruct how to begin creating an agent by giving some information about 
+  useful methods and classes to use. &nbsp;Additionally, see Agents.MyAgent as an example.</p>
+
+
+<p><font size="4">Creating the Agent</font></p>
+
+
+<blockquote> 
+  
+  
+  <p>All agents for the Bot Environment must be part of the "Agents" 
+    package or a subpackage of the "Agents" package, such as "Agents.Student". 
+    In addition, they must import the base classes for agent control as well. 
+    To do this, place the following lines of code at the top of your agent's Java 
+    file:</p>
+
+
+  
+  
+  <blockquote> 
+    
+    
+    <p><font face="Courier New, Courier, mono">package Agents;<br>
+
+
+      - or -<br>
+
+
+      package </font><font face="Courier New, Courier, mono">Agents.Student;</font></p>
+
+
+    
+    
+    <p><font face="Courier New, Courier, mono"> import BotEnvironment.SearchBot.*;</font></p>
+
+
+    </blockquote>
+
+
+  
+  
+  <p>For grading purposes, please submit an agent that is in a
+subpackage of the "Agents" package named after your Cal Poly username
+(e.g. mcolon.MyAgent). &nbsp;Also, make sure your agent extends the <font face="Courier New, Courier, mono">Bot</font> 
+    base class:</p>
+
+
+  
+  
+  <blockquote>
+    
+    
+    <p><font face="Courier New, Courier, mono">public class MyAgent extends Bot</font></p>
+
+
+  </blockquote>
+
+
+</blockquote>
+
+
+<p><font size="4">The <font face="Courier New, Courier, mono">step</font> Method</font></p>
+
+
+<blockquote>
+  
+  
+  <p>Whenever the agent performs some action, it is considered a "step." 
+    This could be anything from final actions, such as making a calculated movement, 
+    or individual actions, such as analyzing a node, making a turn, or making 
+    a movement. How much that is done in a step is up to the programmer, but the 
+    simpler the action per step, the clearer the agent's actions are when viewed. 
+    Keep in mind that while movement / turning costs and searching costs are accrued 
+    when the agent does certain things, there is no difference in costs between 
+    if the agent does a large amount of actions in one step and if the agent splits 
+    their actions over several steps.</p>
+
+
+  
+  
+  <p>When programming the agent, place all computation in the <font face="Courier New, Courier, mono">step()</font> 
+    method, and the GUI will call this method to determine what the agent sees 
+    and where it moves to. Try to make each step action as modular as possible 
+    so that the agent's actions are clearly understandable (in other words, do 
+    not attempt to find the map goal all in one step, but instead, take it one 
+    node at a time).</p>
+
+
+</blockquote>
+
+
+<p><font size="4">Moving the Agent</font></p>
+
+
+<blockquote>
+  
+  
+  <p>Now that the agent is set up, you can begin using motion controls on the 
+    agent. The basic controls for the agent are forward motion and turning. They 
+    can be invoked with the following methods:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">moveForward()</font></div>
+
+        </td>
+
+
+      <td>Moves the agent one tile forward in the current direction it is facing.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">turnLeft()</font></div>
+
+        </td>
+
+
+      <td>Turns the agent 90 degrees left from the current direction it is facing.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">turnRight()</font></div>
+
+        </td>
+
+
+      <td>Turns the agent 90 degrees right from the current direction it is facing.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">turnTo(int)</font></div>
+
+        </td>
+
+
+      <td>Turns the agent to the direction given, where the integer
+values for north, east, south, and west are defined in the SBConstants
+class. &nbsp;Use SBConstants.NORTH, SBConstants.EAST,
+SBConstants.SOUTH, and SBConstants.WEST</td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+
+  
+</blockquote>
+
+
+<blockquote>
+  
+  <p>Each time the agent moves and turns, movement and turning costs are accrued 
+    which are used in some applications, such as comparing efficiency between 
+    agents.</p>
+
+
+</blockquote>
+
+
+<p><font size="4">Other Agent Methods</font></p>
+
+
+<blockquote>
+  
+  
+  <p>In order to intelligently manuever through a map, the agent will need to 
+    analyze its surroundings and determine what to do next, or even know if it 
+    has found the goal. In addition, it may want to let the user know what it 
+    is thinking at a given time. Finally, it may be needed to know how much it 
+    cost to travel the map. The following methods are helpful for these tasks:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getBotLocation()</font></div>
+
+        </td>
+
+
+      <td>Returns the <font face="Courier New, Courier, mono">Node</font> object 
+        that the agent is occupying. From here, the programmer can use the methods 
+        in the <font face="Courier New, Courier, mono">Node</font> class to find 
+        out more about this node and adjacent nodes.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getGoalReached()</font></div>
+
+        </td>
+
+
+      <td>Returns true if the agent has reached the goal of the map, false otherwise.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">log(String)</font></div>
+
+        </td>
+
+
+      <td>Logs a message, which appears in the Agent Log in the GUI. This can 
+        be used to let the user know why the agent is performing a certain task, 
+        to display the state of its knowledge of the map, etc. The log can be 
+        saved as well by the GUI.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getMovementCost()</font></div>
+
+        </td>
+
+
+      <td>Returns the total integer movement cost, where moving and turning costs 
+        are defined in sbcproperties.dat.</td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+  
+  
+  
+  <p>Also, when a map is opened or reset, the <font face="Courier New, Courier, mono">reset()</font> 
+    method is called in the agent. If the programmer has added any variables or 
+    settings to the agent, they should be reset in this method, making sure to 
+    call <font face="Courier New, Courier, mono">super.reset()</font> first.</p>
+
+
+</blockquote>
+
+
+<p><font size="4">Learning About the Environment</font></p>
+
+
+<blockquote>
+  
+  
+  <p>In order to find the goal intelligently, the agent needs to understand its 
+    environment. It needs to know what paths it can take, what the cost is of 
+    traveling through the map, and whether it has passed this way before. The 
+    following methods can be used to learn about a particular <font face="Courier New, Courier, mono">Node</font> 
+    object:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getIsWall()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns true if the node is a wall, false otherwise.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getIsGoal()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns true if the node is a goal, false otherwise.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getCost()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns the integer additional cost it takes to travel 
+        through the node.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getX(), 
+          getY() </font></div>
+
+        </td>
+
+
+      <td valign="top">Returns the integer x or y coordinate of the node in the 
+        map.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getNorth(),<br>
+
+
+          getEast(),<br>
+
+
+          getSouth(),<br>
+
+
+          getWest() </font></div>
+
+        </td>
+
+
+      <td valign="top">Returns the corresponding adjacent <font face="Courier New, Courier, mono">Node</font> 
+        objects to the agent's location.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getIsViewed()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns true if the node has ever been seen (i.e. the agent 
+        has called <font face="Courier New, Courier, mono">getNorth()</font>, 
+        <font face="Courier New, Courier, mono">getEast()</font>, etc. to get 
+        the node), false otherwise.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getIsTraveled()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns true if the agent has traveled on the node before, 
+        false otherwise.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getBotIsHere()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns true if the agent is currently on this node, false 
+        otherwise. </td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+
+  
+  
+  <p>In addition to these, an agent can ask for hints on where the goal is. The 
+    SBFunctions class has a few static methods to give a hint on where the goal 
+    is:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr>
+
+ 
+      <td valign="top" width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getDistanceToGoal(Node)</font></div>
+
+        </td>
+
+
+      <td>Returns the integer number of nodes away the goal is from the given 
+        node, disregarding walls or additional costs.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getDirectionOfGoal(Node)</font></div>
+
+        </td>
+
+
+      <td>Returns the integer direction of where the goal is, where the integer 
+        values for north, east, south, and west are defined in the SBConstants 
+        class.</td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+
+  
+  
+  <p>In some cases, the instructor may ask the programmer to either not use hints 
+    or to add an additional cost value to the total costs of movement and searching 
+    for each hint used. Before using these hints in an assignment, please ask 
+    the instructor whether they are allowed to be used.</p>
+
+
+</blockquote>
+
+
+<p><font size="4">Search Algorithm Agents</font></p>
+
+
+<blockquote> 
+  
+  
+  <p>A special case of agents are those that use searching algorithms to find 
+    the goal. The Bot Environment allows for the agent to perform an <em>off-line</em> 
+    search, or a search in which the agent searches for and finds the goal before 
+    it begins moving. To create a search algorithm agent, extend the <font face="Courier New, Courier, mono">BotSearch</font> 
+    class instead of the <font face="Courier New, Courier, mono">Bot</font> class. 
+    The <font face="Courier New, Courier, mono">BotSearch</font> class is a base 
+    class for search algorithm agents and it is an extension of the <font face="Courier New, Courier, mono">Bot<font face="Times New Roman, Times, serif"> 
+    </font></font>class, so it has all the functionality as stated before.</p>
+
+
+  
+  
+  <p>When using a search algorithm agent, the agent will need to use a <em>fringe</em>, 
+    or a list of nodes that are to be evaluated. Depending on the search algorithm, 
+    these nodes may be ordered differently. The fringe in the Bot Environment 
+    is saved as a <font face="Courier New, Courier, mono">LinkedList</font> object, 
+    and the following are several methods in the <font face="Courier New, Courier, mono">BotSearch</font> 
+    class that are available to manage and use the fringe:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr>
+
+ 
+      <td valign="top" width="222"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">addToFringe(Node)</font></div>
+
+        </td>
+
+
+      <td valign="top" width="591">Adds the <font face="Courier New, Courier, mono">Node</font> 
+        object to the end of the fringe.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">addToFringe(Node, 
+          int)</font></div>
+
+        </td>
+
+
+      <td valign="top">Adds the <font face="Courier New, Courier, mono">Node</font> 
+        object to the fringe at the specified index.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top" width="222"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">sortFringe(Comparator)</font></div>
+
+        </td>
+
+
+      <td valign="top">Sorts the fringe by the criteria in the <font face="Courier New, Courier, mono">Comparator</font> 
+        object. In order to use this, the programmer must write a class that implements 
+        the <font face="Courier New, Courier, mono">Comparator</font> interface 
+        and state how to determine the order in which to list nodes using the 
+        <font face="Courier New, Courier, mono">compare(Object, Object)</font> 
+        method. In addition, since the agent is in the "Agents" package, 
+        the <font face="Courier New, Courier, mono">Comparator</font> needs to 
+        be, too.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">fringeContains(Node)</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns true if the <font face="Courier New, Courier, mono">Node</font> 
+        object is in the fringe, false otherwise. </td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getNextFringeNode()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns the first <font face="Courier New, Courier, mono">Node</font> 
+        object in the fringe.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getFringeString()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns the contents of the fringe as a <font face="Courier New, Courier, mono">String</font> 
+        in the form: <font face="Courier New, Courier, mono">{[x1,y1], [x2,y2], 
+        ... ,[xn,yn]}</font>. This is sometimes useful to log while watching the 
+        agent's actions.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+ 
+      <td valign="top">
+        
+        <div align="center"><font face="Courier New, Courier, mono">getFringe()</font></div>
+
+        </td>
+
+
+      <td valign="top">Returns the <font face="Courier New, Courier, mono">LinkedList</font> 
+        object of the fringe. This is only useful if the programmer plans to do 
+        something else with the fringe that the <font face="Courier New, Courier, mono">BotSearch</font> 
+        class does not.</td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+
+  
+  
+  <p>Just as the <font face="Courier New, Courier, mono">Bot</font> class allows 
+    for the movement and adjacent node analysis of the agent, the <font face="Courier New, Courier, mono">BotSearch</font> 
+    class allows for the movement and adjacent node analysis of the search. Moving 
+    the search requires passing a node to the <font face="Courier New, Courier, mono">moveSearchLocation(Node)</font> 
+    method. Unlike the <font face="Courier New, Courier, mono">Bot</font> classes 
+    movement methods, the search can be moved to any node, since many searching 
+    algorithms sort the fringe of nodes according to some criteria, so adjacent 
+    nodes may not be the first chosen. The following methods are also in the <font face="Courier New, Courier, mono">BotSearch</font> 
+    class and have to do with performing a search:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr valign="top">
+
+ 
+      <td width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getGoalFound()</font></div>
+
+        </td>
+
+
+      <td>Returns true if the search has found the goal by the search, false otherwise.</td>
+
+
+    </tr>
+
+
+    <tr valign="top">
+
+ 
+      <td> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getSearchLocation()</font></div>
+
+        </td>
+
+
+      <td>Returns the <font face="Courier New, Courier, mono">Node</font> object 
+        that the search is occupying. From here, you can use the methods in the 
+        <font face="Courier New, Courier, mono">Node</font> class to find out 
+        more about this node and adjacent nodes.</td>
+
+
+    </tr>
+
+
+    <tr valign="top">
+
+ 
+      <td> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">moveSearchLocation(Node)</font></div>
+
+        </td>
+
+
+      <td>Moves the search location to the <font face="Courier New, Courier, mono">Node</font> 
+        object given. This is most usefully coupled with the <font face="Courier New, Courier, mono">Node</font> 
+        returned from <font face="Courier New, Courier, mono">getNextFringeNode()</font>.</td>
+
+
+    </tr>
+
+
+    <tr valign="top">
+
+ 
+      <td> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getSearchCost()</font></div>
+
+        </td>
+
+
+      <td>Returns the total integer searching cost, where the cost to view a node 
+        is defined in sbcproperties.dat.</td>
+
+
+    </tr>
+
+
+    <tr valign="top">
+
+ 
+      <td>
+        
+        <div align="center"><font face="Courier New, Courier, mono">getNorthOfSearchLocation(),<br>
+
+
+          getEastOfSearchLocation(),<br>
+
+
+          getSouthOfSearchLocation(),<br>
+
+
+          getWestOfSearchLocation()</font></div>
+
+        </td>
+
+
+      <td>Returns the corresponding adjacent <font face="Courier New, Courier, mono">Node</font> 
+        objects to the search's location. This needs to be used instead of the 
+        getNorth(), getEast(), ... methods of the node so that the interface updates 
+        that the node has been seen.</td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+
+  
+  
+  <p>The most important change when using a search algorithm agent is that the 
+    <font face="Courier New, Courier, mono">step(</font>) method has been split 
+    into two step methods: a <font face="Courier New, Courier, mono">searchStep()</font> 
+    method and a <font face="Courier New, Courier, mono">movementStep()</font> 
+    method. In the <font face="Courier New, Courier, mono">searchStep()</font> 
+    method, the programmer should put all computation steps when searching for 
+    the goal, and in the <font face="Courier New, Courier, mono">movementStep()</font> 
+    method, the programmer should put all computation steps when moving the agent 
+    to the goal. The programmer does not need a <font face="Courier New, Courier, mono">step()</font> 
+    method in the agent's class because it has been taken care of in the <font face="Courier New, Courier, mono">BotSearch</font> 
+    class, so he/she only needs to write a <font face="Courier New, Courier, mono">searchStep()</font> 
+    and <font face="Courier New, Courier, mono">movementStep()</font> method for 
+    stepping in the agent's class.</p>
+
+
+  
+  
+  <p>The way that these two methods work is that <font face="Courier New, Courier, mono">searchStep()</font> 
+    is called until the goal is found by the search. This happens when the search 
+    is moved via <font face="Courier New, Courier, mono">moveSearchLocation(Node)</font> 
+    onto the goal node. At that point, the next step calls the method <font face="Courier New, Courier, mono">movementStep()</font>, 
+    which is continually called until the agent itself reaches the goal. There 
+    is no intermediary step, so if there is any computation that needs to be done 
+    before the agent begins moving, call <font face="Courier New, Courier, mono">getGoalFound()</font> 
+    in an <font face="Courier New, Courier, mono">if</font> statement at the end 
+    of the <font face="Courier New, Courier, mono">searchStep()</font>, and if 
+    it is true, perform the needed computation within the block of the <font face="Courier New, Courier, mono">if</font> 
+    statement.</p>
+
+
+  
+  
+  <p>Finally, some additional methods are available in the <font face="Courier New, Courier, mono">Node</font> 
+    class for use by search algorithm agents:</p>
+
+
+  
+  
+  <table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+      <tr valign="top">
+
+ 
+      <td width="150"> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getIsEvaluated()</font></div>
+
+        </td>
+
+
+      <td>Returns true if the node has been evaluated by the search, false otherwise. 
+        A node is deemed evaluated if the search has moved its location to it 
+        at some time.</td>
+
+
+    </tr>
+
+
+    <tr valign="top">
+
+ 
+      <td> 
+        
+        <div align="center"><font face="Courier New, Courier, mono">getSearchIsHere()</font></div>
+
+        </td>
+
+
+      <td>Returns true if the search is currently on this node, false otherwise.</td>
+
+
+    </tr>
+
+
+  
+    
+    </tbody>
+  
+  </table>
+
+  <br>
+
+</blockquote>
+
+<div style="text-align: center;">
+<div style="text-align: left;"><span style="font-style: italic;"></span><big>The NodeInformation Class</big><br>
+
+<br>
+
+<div style="margin-left: 40px;">To aid you in storing information that
+the search gathers, the NodeInformation class is provided for your
+agent to use. &nbsp;It contains getters and setters dealing with
+relevant information retrieved during the searching process, such as
+the heading that the search was facing when it entered a node, the path
+cost and heuristics that are calculated and retrieved by the search,
+and the parent and child node links that can be used when creating a
+path from the starting node to the goal node for the agent to travel.
+&nbsp;<span style="font-weight: bold; font-style: italic;">As an important note, the NodeInformation class DOES NOT store any information in it until the programmer gives it information!</span>
+&nbsp;This means that if you call the method, getPathCost(), it will
+return '0' unless the programmer gives it a value using setPathCost().
+&nbsp;The NodeInformation class is merely a handy tool for storing
+information for the agent while finding the path to the goal. &nbsp;To
+use a NodeInformation object, instantiate one by passing it a node that
+you wish to store information about and as you obtain information about
+that node, call the appropriate setter methods to hold onto that
+information. &nbsp;The following are methods within the NodeInformation
+class:<br>
+
+<br>
+
+<table align="center" border="0" cellpadding="0" cellspacing="2" width="90%">
+
+
+    <tbody>
+
+    <tr valign="top">
+
+ 
+      <td width="150"> 
+      
+      <div align="center"><font face="Courier New, Courier, mono">getNode() and setNode(Node)</font></div>
+
+      </td>
+
+
+      <td>Returns or sets the node that is associated with this NodeInformation object.</td>
+
+
+    </tr>
+
+
+    <tr valign="top">
+
+ 
+      <td> 
+      
+      <div align="center"><font face="Courier New, Courier, mono">getNode() and setParent(NodeInformation)</font></div>
+
+      </td>
+
+
+      <td>Returns or sets the NodeInformation object for the node
+that was evaluated along the path to the goal before evaluating the
+node associated with this NodeInformation object.<br>
+
+      </td>
+
+
+    </tr>
+
+    <tr>
+
+      <td style="text-align: center; font-family: Courier New,Courier,monospace;">getChild() and setChild(NodeInformation, int)</td>
+
+      <td>Returns or sets the NodeInformation object for the node that
+was evaluated along the path to the goal after evaluating the node
+associated with this NodeInformation object. &nbsp;When setting, the
+direction from the node associated with this NodeInformation object to
+the child node is passed as a parameter, where the values of north,
+east, south, and west are as defined in SBConstants.</td>
+
+    </tr>
+
+    <tr>
+
+      <td style="text-align: center; font-family: Courier New,Courier,monospace;">getDirectionOfChild()</td>
+
+      <td>Returns the integer direcction from the node associated with
+this NodeInformation object to the child node, where the values of
+north, east, south, and west are as defined in SBConstants.</td>
+
+    </tr>
+
+    <tr>
+
+      <td style="text-align: center; font-family: Courier New,Courier,monospace;">getSearchHeading() and setSearchHeading(int)</td>
+
+      <td>Returns or sets the direction the search was facing when it
+"moved" to the node associated with this NodeInformation object.
+&nbsp;In other words, the direction stored in the search heading is the
+direction in which this node was in relation to the node the search was
+in when viewing its adjacent nodes.</td>
+
+    </tr>
+
+    <tr>
+
+      <td style="text-align: center; font-family: Courier New,Courier,monospace;">getPathCost() and setPathCost(int)</td>
+
+      <td>Returns or sets the path cost to move to the node associated
+with this NodeInformation object, taking into account forward movement
+costs and turning costs.</td>
+
+    </tr>
+
+    <tr>
+
+      <td style="text-align: center;"><span style="font-family: Courier New,Courier,monospace;">toString()</span></td>
+
+      <td>Returns a string representation of the x-y coordinates of the
+node associated with this NodeInformation object in the form "(x,y)."</td>
+
+    </tr>
+
+
+  
+  
+  </tbody>
+</table>
+
+<br>
+
+<br>
+
+A difficult part of finding the path to the goal is determining the
+single path the agent should take after the search has found the goal.
+&nbsp;The NodeInformation class is helpful in this respect because it
+allows the programmer to store the parent and child NodeInformation
+objects as the search is being performed. &nbsp;When evaluating a
+node,&nbsp;set the parent value of the NodeInformation object
+associated with each adjacent node to the current node so that once the
+goal node is found, trace the parents up from the goal NodeInformation
+to the starting NodeInformation, setting the NodeInformation object
+previously used as the child NodeInformation object of the current one.
+&nbsp;Using this pattern, once you arrive back at the starting
+NodeInformation object, the agent only has to move to each child
+NodeInformation's node to reach the goal.<br>
+<br>
+</div>
+<big>Compiling Your Agent</big><br>
+<br>
+<div style="margin-left: 40px;">To compile your agent, make sure that
+the package information is set correctly in your agent and that it is
+in the correct directory within the Agents package, then from a command
+prompt from the directory in which the BotEnvironment.jar resides, type
+"<span style="font-family: Courier New,Courier,monospace;">javac -cp BotEnvironment.jar;.; Agents\&lt;PACKAGE&gt;\&lt;AGENT NAME&gt;.java</span>". &nbsp;For example, you could compile an agent in the "Agents.mcolon" package by typing "<span style="font-family: Courier New,Courier,monospace;">javac -cp BotEnvironment.jar;.; Agents\mcolon\MyAgent.java</span>".<span style="font-style: italic;"></span></div>
+
+</div>
+
+</div>
+
+<div style="text-align: left;">
+  <span style="font-style: italic;"></span><br>
+<h1>Using the Bot Environment</h1>
+<div style="margin-left: 40px;"><span style="font-style: italic;"><span style="font-weight: bold;">The Bot Environment was compiled using a Java 1.5 SDK, thus a Java 1.5 Runtime Environment is needed to use the Bot Environment.</span></span><br>
+<br>
+To use the Bot Environment, unzip the BotEnvironment.zip file into a
+directory of your choice. &nbsp;To start up the BotEnvironment, run the
+run.bat file (if using a non-Windows operating system, at a command
+prompt, type "<span style="font-family: Courier New,Courier,monospace;">java -cp BotEnvironment.jar;.; BotEnvironment.BotEnvironment</span>").
+&nbsp;Once the program has opened, choose File --&gt; New Bot
+Environment Session... &nbsp;From here, choose your agent from the
+Agents directory.<br>
+<br>
+Once the session loads, choose Map --&gt; Open Map to open a map for
+the agent to explore. &nbsp;Choose a map from the "testmaps" directory.
+&nbsp;When it loads, you may move the map window around to where you
+would like it. &nbsp;Make sure to notice the "Agent View" map that
+appears underneath the "Overview" map window and move it so it is
+visible as well. &nbsp;The "Overview" map shows the entire map and what
+the agent has explored so far while the "Agent View" shows only what
+the agent knows about its environment. &nbsp;By using the Step and Auto
+Step buttons or the Bot menu, you can make the bot perform what you
+have programmed it to do in the <span style="font-family: Courier New,Courier,monospace;">step()</span> method (if you want to stop auto-stepping, press the Stop button or go to Bot --&gt; Stop). &nbsp;If you have used the <span style="font-family: Courier New,Courier,monospace;">log()</span>
+method in your agent class, the log information will appear in the
+"Agent Log" window as your agent performs its steps. &nbsp;In addition,
+you can save the log by clicking on the "Save log..." button at the
+bottom of the "Agent Log" window. &nbsp;If the agent is moving too fast
+or too slow for you, you can adjust the pause between steps by moving
+the "Delay" slider next to the Step buttons. &nbsp;If you want to
+understand what the pictures represent on the map, go to View --&gt;
+Legend to bring up a graphical legend of the map. &nbsp; If you want to
+start the agent over at the beginning of the map, go to Map --&gt;
+Reset Map to reset the map.</div>
+</div>
+<blockquote>
+  <div style="text-align: center;"><span style="font-style: italic;"><br>
+
+Last updated: October 2, 2006 by Matt Col&oacute;n</span><br>
+
+
+  </div>
+
+</blockquote>
+
+</body>
+</html>
