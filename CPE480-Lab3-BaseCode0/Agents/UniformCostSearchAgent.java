@@ -12,15 +12,16 @@ import java.util.*;
 import java.lang.Math;
 
 /**
-* This class represents the abstract basic agent for uninformed search.
-* Concrete agent implementations must specify where node that is explored by the search is to be added
-* to the fringe, thus differentiating between breadth-first search (addition position = end of fringe)
-* adnd depth-first search (addition position = beginning of fringe).
+*
 * @author Stephanie Ehrenberg (sehrenbe@hm.edu)
-* @version 2015-04-21
+* @version 2015-05-16
 */
-public abstract class UninformedSearchAgent extends BotSearch {
+public abstract class UniformCostSearchAgent extends BotSearch {
 
+	/** The uniform cost for travelling from one node to another. */
+	private static int EDGE_COST = 1;
+	/** Indicates what changing direction costs.*/
+	private static int TURN_COST = 1;
 	/** The path to the goal as calculated by the search algorithm. */
 	List<Node> path;
 	/** A map of all visited nodes where each node (key) is stored with their respective parent node (value).
@@ -32,10 +33,7 @@ public abstract class UninformedSearchAgent extends BotSearch {
 	int searchSteps;
 	int movementSteps;
 
-	/**
-	* Ctor.
-	*/
-	public UninformedSearchAgent() {
+	public UniformCostSearchAgent() {
 
         super();
         setDeveloperName("Stephanie");
@@ -65,6 +63,46 @@ public abstract class UninformedSearchAgent extends BotSearch {
     			moveSearchLocation(getNextFringeNode());
     		}
     	}
+	}
+
+	/**
+	* Inspects all nodes horizontally or vertically adjacent to the search's current location.
+	*/
+	private void inspectNeighborNodes() {
+
+		addNodeToFringe(getNorthOfSearchLocation());
+		addNodeToFringe(getEastOfSearchLocation());
+		addNodeToFringe(getWestOfSearchLocation());
+		addNodeToFringe(getSouthOfSearchLocation());
+	}
+
+	/**
+	* Adds a given node to the fringe for later inspection, as long as it is no wall element,
+	* has not been evaluated yet by the search and is not already contained by the fringe.
+	* @param node The node that is to be added.
+	*/
+	private void addNodeToFringe(final Node node) {
+
+		if(!(node.getIsEvaluated() || node.getIsWall())) {
+
+			if(!fringeContains(node)) {
+
+				node.setCost(calculateCost());
+				addToFringe(node);
+				// remember the node plus its parent node for later path creation!
+				nodes.put(node, getSearchLocation());
+			}
+		}
+	}
+
+	/** Calculates the overall cost for a given node. */
+	private int calculateCost() {
+
+		int cost = EDGE_COST;
+		Node currentNode = getSearchLocation();
+		Node previousNode = nodes.get(currentNode);
+		cost += currentNode.getCost();
+
 	}
 
 	/**
@@ -102,44 +140,6 @@ public abstract class UninformedSearchAgent extends BotSearch {
         searchSteps = 0;
 		movementSteps = 0;
 	}
-
-	/**
-	* Inspects all nodes horizontally or vertically adjacent to the search's current location.
-	*/
-	private void inspectNeighborNodes() {
-		addNodeToFringe(getNorthOfSearchLocation());
-		addNodeToFringe(getEastOfSearchLocation());
-		addNodeToFringe(getWestOfSearchLocation());
-		addNodeToFringe(getSouthOfSearchLocation());
-	}
-
-	/**
-	* Adds a given node to the fringe for later inspection, as long as it is no wall element,
-	* has not been evaluated yet by the search and is not already contained by the fringe.
-	* @param node The node that is to be added.
-	*/
-	private void addNodeToFringe(final Node node) {
-
-		if(!(node.getIsEvaluated() || node.getIsWall())) {
-
-			if(!fringeContains(node)) {
-
-				addToFringe(node, getAdditionPosition());
-				// remember the node plus its parent node for later path creation!
-				nodes.put(node, getSearchLocation());
-			}
-		}
-	}
-
-	/**
-	* Derived classes must specify where a newly discovered node is to be added to the fringe.
-	* The next node for inspection by the search is always taken from the head of the fringe data
-	* structure. With this function it is possible to distinct between breadth-first search,
-	* where a node is added to the END of the fringe, and depth-first search, where a node
-	* is added to the BEGINNING of the fringe.
-	* @return The position (aka index) of the fringe where a node is to be added.
-	*/
-	protected abstract int getAdditionPosition();
 
 	/**
 	* Reconstructs the direct path to the bot's position recursively, starting from the goal
