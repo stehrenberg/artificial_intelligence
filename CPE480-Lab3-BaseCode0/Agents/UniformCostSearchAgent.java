@@ -91,8 +91,7 @@ public class UniformCostSearchAgent extends BotSearch {
 		int overallCost = EDGE_COST;
 		int turningCost = determineTurningCost(nodeToAdd);
 		overallCost += currentNode.getCost();
-		log(currentNode == null);
-		log(nodeCosts == null);
+		// NULLPOINTER, weil bei den ersten Knoten noch keine Einträge für die Kosten drin sind!!!
 		overallCost += nodeCosts.get(currentNode);
 		overallCost += turningCost;
 
