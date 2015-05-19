@@ -22,37 +22,50 @@ public class UniformCostSearchAgent extends BotSearch {
 	private static int EDGE_COST = 1;
 	/** Indicates what changing direction costs.*/
 	private static int TURN_COST = 1;
+
 	/** A map of all visited nodes where each node (key) is stored with their respective PATH costs. */
 	Map<Node, Integer> nodeCosts;
 	Map<Node, Node> nodes;
+	/** The path to the goal as calculated by the search algorithm. */
+	List<Node> path;
+
+	/** Indicates wether a path to the goal, i.e. a solution, has already been found. */
+	boolean pathNotCreatedYet;
 
 	boolean goalDirectionComputed;
+	int searchSteps;
+	int movementSteps;
 
 	public UniformCostSearchAgent() {
         super();
         nodeCosts = new HashMap<Node, Integer>();
         nodes = new HashMap<Node, Node>();
+        path = new ArrayList<Node>();
+        pathNotCreatedYet = true;
+        searchSteps = 0;
+        movementSteps = 0;
 	}
 
 	@Override public void searchStep() {
 
 		int goalDirection = SBFunctions.getDirectionOfGoal(getSearchLocation());
 		inspectNeighborNodes();
+
 		if(getFringe().size() > 1) {
 			sortFringe(new Comparator<Node>() {
-
 				@Override public int compare(Node node, Node anotherNode) {
-
 					int costDiff = nodeCosts.get(node) - nodeCosts.get(anotherNode);
 					int result = costDiff > 0? 1 : -1;
-
 					return costDiff == 0? 0: result;
 				}
 			});
 		}
 
-		log(getFringeString());
-
+		List fringe = getFringe();
+		for(Object thing : fringe) {
+			Node node = (Node)thing;
+			log("node " + node.getX() + "/" + node.getY() + " with costs " + nodeCosts.get(node));
+		}
 		moveSearchLocation(getNextFringeNode());
 	}
 
@@ -85,16 +98,18 @@ public class UniformCostSearchAgent extends BotSearch {
 		}
 	}
 
-	/** Calculates the overall cost for a given node. */
-	private int calculateCost(Node nodeToAdd, Node currentNode) {
+	/** Calculates the overall cost for a given node.
+	* @param inspectedNode The node that is currently inspected and is to be added to the fringe
+	* @param currentNode The current searchPosition that serves as parent to all newly inspected nodes.
+	*/
+	private int calculateCost(Node inspectedNode, Node currentNode) {
 
 		int overallCost = EDGE_COST;
-		int turningCost = determineTurningCost(nodeToAdd);
-		overallCost += currentNode.getCost();
-		// NULLPOINTER, weil bei den ersten Knoten noch keine Einträge für die Kosten drin sind!!!
-		overallCost += nodeCosts.get(currentNode);
-		overallCost += turningCost;
+		int turningCost = determineTurningCost(inspectedNode);
+		int nodeCost = inspectedNode.getCost();
+		int pathCost = nodeCosts.containsKey(currentNode)? nodeCosts.get(currentNode) : 0;
 
+		overallCost = overallCost + turningCost + nodeCost + pathCost;
 		return overallCost;
 	}
 
@@ -112,8 +127,73 @@ public class UniformCostSearchAgent extends BotSearch {
 		return turningCosts;
 	}
 
-	@Override public void movementStep() {
-		log("moving!");
+	/**
+	* Called when the goal has been found. Moves the bot itself.
+	*/
+	public void movementStep() {
+
+		// before the bot can move, it needs a path to follow - right?
+		if (pathNotCreatedYet) {
+			createPath(getSearchLocation());
+			pathNotCreatedYet = false;
+		}
+
+		Node nextNode = getNextNode();
+		Node botPosition = getBotLocation();
+		int direction = determineDirection(botPosition, nextNode);
+
+		turnTo(direction);
+		moveForward();
+		movementSteps++;
+
+		// prints the evaluation as soon as the goal is reached.
+		if(nextNode.getIsGoal())
+			printEvaluation();
+	}
+
+		/**
+	* Reconstructs the direct path to the bot's position recursively, starting from the goal
+	* after the search has found the goal's location.
+	* @param node 	The current node that is to be added to the solution path, unless
+	*				it is the node the bot is currently standing on.
+	*/
+	protected void createPath(final Node node) {
+
+		if(node != getBotLocation()) {
+			path.add(node);
+			final Node parentNode = nodes.get(node);
+			// continue with current node's parent node
+			createPath(parentNode);
+		}
+	}
+
+	/**
+	* Returns the next node for the bot to move to. Since the path is build from the goal to
+	* the bot's position the bot needs to follow it in reverse order.
+	* @return The next node from the end of the path data structure.
+	*/
+	private Node getNextNode() {
+
+		final Node nextNode = path.get(path.size() - 1);
+		path.remove(nextNode);
+		return nextNode;
+	}
+
+	/**
+	* Determines in which direction the bot needs to turn in order to move to the next node.
+	* @param botPosition The bot's current position.
+	* @param nextNode The next node from the solution path.
+	* @return The turning direction - NORTH, EAST, SOUTH or WEST.
+	*/
+	private int determineDirection(final Node botPosition, final Node nextNode) {
+		final int direction;
+
+		if(botPosition.getY() == nextNode.getY())
+			direction = botPosition.getX() < nextNode.getX()? SBConstants.EAST : SBConstants.WEST;
+		else
+			direction = botPosition.getY() < nextNode.getY()? SBConstants.SOUTH : SBConstants.NORTH;
+
+		return direction;
 	}
 
 	/**
@@ -135,4 +215,17 @@ public class UniformCostSearchAgent extends BotSearch {
 		super.path.remove(nextNode);
 		return nextNode;
 	}*/
+
+
+	/**
+	* Prints some statistical information as soon as the bot has reached the goal,
+	* such as movement/search costs and the overall search/movement steps neccessary.
+	*/
+	protected void printEvaluation() {
+
+		log("Overall Search Cost: " + getSearchCost());
+		log("Total Search Steps required: " + searchSteps);
+		log("Overall Movement Cost: " + getMovementCost());
+		log("Total Movement Steps required: " + movementSteps);
+	}
 }
