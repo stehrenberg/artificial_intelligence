@@ -118,7 +118,7 @@ public abstract class UninformedSearchAgent extends BotSearch {
 	* has not been evaluated yet by the search and is not already contained by the fringe.
 	* @param node The node that is to be added.
 	*/
-	private void addNodeToFringe(final Node node) {
+	protected void addNodeToFringe(final Node node) {
 
 		if(!(node.getIsEvaluated() || node.getIsWall())) {
 

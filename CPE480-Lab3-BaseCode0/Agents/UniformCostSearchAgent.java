@@ -16,7 +16,7 @@ import java.lang.Math;
 * @author Stephanie Ehrenberg (sehrenbe@hm.edu)
 * @version 2015-05-16
 */
-public abstract class UniformCostSearchAgent extends UninformedSearchAgent {
+public class UniformCostSearchAgent extends BotSearch {
 
 	/** The uniform cost for travelling from one node to another. */
 	private static int EDGE_COST = 1;
@@ -24,10 +24,46 @@ public abstract class UniformCostSearchAgent extends UninformedSearchAgent {
 	private static int TURN_COST = 1;
 	/** A map of all visited nodes where each node (key) is stored with their respective PATH costs. */
 	Map<Node, Integer> nodeCosts;
+	Map<Node, Node> nodes;
+
+	boolean goalDirectionComputed;
 
 	public UniformCostSearchAgent() {
         super();
-        nodeCosts = new HashMap<Node, Node>();
+        nodeCosts = new HashMap<Node, Integer>();
+        nodes = new HashMap<Node, Node>();
+	}
+
+	@Override public void searchStep() {
+
+		int goalDirection = SBFunctions.getDirectionOfGoal(getSearchLocation());
+		inspectNeighborNodes();
+		if(getFringe().size() > 1) {
+			sortFringe(new Comparator<Node>() {
+
+				@Override public int compare(Node node, Node anotherNode) {
+
+					int costDiff = nodeCosts.get(node) - nodeCosts.get(anotherNode);
+					int result = costDiff > 0? 1 : -1;
+
+					return costDiff == 0? 0: result;
+				}
+			});
+		}
+
+		log(getFringeString());
+
+		moveSearchLocation(getNextFringeNode());
+	}
+
+	/**
+	* Inspects all nodes horizontally or vertically adjacent to the search's current location.
+	*/
+	private void inspectNeighborNodes() {
+		addNodeToFringe(getNorthOfSearchLocation());
+		addNodeToFringe(getEastOfSearchLocation());
+		addNodeToFringe(getWestOfSearchLocation());
+		addNodeToFringe(getSouthOfSearchLocation());
 	}
 
 	/**
@@ -35,26 +71,32 @@ public abstract class UniformCostSearchAgent extends UninformedSearchAgent {
 	* has not been evaluated yet by the search and is not already contained by the fringe.
 	* @param node The node that is to be added.
 	*/
-	@Override private void addNodeToFringe(final Node node) {
+	private void addNodeToFringe(final Node node) {
 
 		if(!(node.getIsEvaluated() || node.getIsWall())) {
 
 			if(!fringeContains(node)) {
 				addToFringe(node);
-				nodeCosts.put(node, calculateCost(node));
+				log("Cost Information for node " + node.getX() + "/" + node.getY() + " : " + node.getCost());
 				// remember the node plus its parent node for later path creation!
-				super.nodes.put(node, getSearchLocation());
+				nodes.put(node, getSearchLocation());
+				nodeCosts.put(node, calculateCost(node, getSearchLocation()));
 			}
 		}
 	}
 
 	/** Calculates the overall cost for a given node. */
-	private int calculateCost(Node nodeToAdd) {
+	private int calculateCost(Node nodeToAdd, Node currentNode) {
 
 		int overallCost = EDGE_COST;
 		int turningCost = determineTurningCost(nodeToAdd);
 		overallCost += currentNode.getCost();
+		log(currentNode == null);
+		log(nodeCosts == null);
+		overallCost += nodeCosts.get(currentNode);
 		overallCost += turningCost;
+
+		return overallCost;
 	}
 
 	/**
@@ -65,10 +107,14 @@ public abstract class UniformCostSearchAgent extends UninformedSearchAgent {
 
 		int turningCosts = 0;
 		Node currentNode = getSearchLocation();
-		Node previousNode = super.nodes.get(currentNode);
+		Node previousNode = nodes.get(currentNode);
 
-		// TODO replace with actual cost calculation!
-		return 1;
+		// TODO Do turning cost calculation!
+		return turningCosts;
+	}
+
+	@Override public void movementStep() {
+		log("moving!");
 	}
 
 	/**
@@ -84,10 +130,10 @@ public abstract class UniformCostSearchAgent extends UninformedSearchAgent {
 	* the bot's position the bot needs to follow it in reverse order.
 	* @return The next node from the end of the path data structure.
 	*/
-	private Node getNextNode() {
+/*	private Node getNextNode() {
 
-		final Node nextNode = super.path.get(path.size() - 1);
+		final Node nextNode = path.get(path.size() - 1);
 		super.path.remove(nextNode);
 		return nextNode;
-	}
+	}*/
 }
