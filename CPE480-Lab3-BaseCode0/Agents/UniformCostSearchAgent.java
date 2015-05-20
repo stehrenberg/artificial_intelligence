@@ -40,10 +40,16 @@ public class UniformCostSearchAgent extends InformedSearchAgent {
 	private int determineTurningCost(Node nodeToAdd) {
 
 		int turningCosts = 0;
-		Node currentNode = getSearchLocation();
-		Node previousNode = nodes.get(currentNode);
 
-		// TODO Do turning cost calculation!
+		if(getSearchLocation() != getStartingLocation()) {
+			Node currentNode = getSearchLocation();
+			Node previousNode = nodes.get(currentNode);
+
+			boolean directionChange = determineDirection(previousNode, currentNode) != determineDirection(currentNode, nodeToAdd);
+
+			if(directionChange)
+				turningCosts = 1;
+
 		return turningCosts;
 	}
 }

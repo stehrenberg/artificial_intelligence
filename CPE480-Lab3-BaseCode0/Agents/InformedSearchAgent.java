@@ -127,7 +127,7 @@ public abstract class InformedSearchAgent extends BotSearch {
 			printEvaluation();
 	}
 
-		/**
+	/**
 	* Reconstructs the direct path to the bot's position recursively, starting from the goal
 	* after the search has found the goal's location.
 	* @param node 	The current node that is to be added to the solution path, unless
@@ -161,7 +161,7 @@ public abstract class InformedSearchAgent extends BotSearch {
 	* @param nextNode The next node from the solution path.
 	* @return The turning direction - NORTH, EAST, SOUTH or WEST.
 	*/
-	private int determineDirection(final Node botPosition, final Node nextNode) {
+	protected int determineDirection(final Node botPosition, final Node nextNode) {
 		final int direction;
 
 		if(botPosition.getY() == nextNode.getY())
@@ -177,21 +177,13 @@ public abstract class InformedSearchAgent extends BotSearch {
 	*/
     @Override public void reset() {
         super.reset();
-        nodeCosts = new HashMap<Node, Integer>();
+        nodeCosts.clear();
+		nodes.clear();
+		path.clear();
+		pathNotCreatedYet = true;
+		searchSteps = 0;
+		movementSteps = 0;
 	}
-
-	/**
-	* Returns the next node for the bot to move to. Since the path is build from the goal to
-	* the bot's position the bot needs to follow it in reverse order.
-	* @return The next node from the end of the path data structure.
-	*/
-/*	private Node getNextNode() {
-
-		final Node nextNode = path.get(path.size() - 1);
-		super.path.remove(nextNode);
-		return nextNode;
-	}*/
-
 
 	/**
 	* Prints some statistical information as soon as the bot has reached the goal,
