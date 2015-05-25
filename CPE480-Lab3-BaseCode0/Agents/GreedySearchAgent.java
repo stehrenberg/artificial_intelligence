@@ -16,14 +16,14 @@ import java.lang.Math;
 * @author Stephanie Ehrenberg (sehrenbe@hm.edu)
 * @version 2015-05-19
 */
-public class GreedySearchAgent extends BotSearch {
+public class GreedySearchAgent extends InformedSearchAgent {
 
 	/** Calculates the cost for a given node. With GreedySearch, those are only calculated from the
 	* distance to the goal.
 	* @param inspectedNode The node that is currently inspected and is to be added to the fringe
 	* @param searchPosition The current searchPosition that serves as parent to all newly inspected nodes.
 	*/
-	private int calculateCost(Node inspectedNode, Node searchPosition) {
+	protected int calculateCost(Node inspectedNode, Node searchPosition) {
 		return SBFunctions.getDistanceToGoal(getSearchLocation());
 	}
 }

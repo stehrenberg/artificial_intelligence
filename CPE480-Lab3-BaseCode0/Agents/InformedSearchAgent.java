@@ -30,8 +30,6 @@ public abstract class InformedSearchAgent extends BotSearch {
 	List<Node> path;
 	/** Indicates wether a path to the goal, i.e. a solution, has already been found. */
 	boolean pathNotCreatedYet;
-
-	boolean goalDirectionComputed;
 	int searchSteps;
 	int movementSteps;
 
@@ -47,7 +45,6 @@ public abstract class InformedSearchAgent extends BotSearch {
 
 	@Override public void searchStep() {
 
-		int goalDirection = SBFunctions.getDirectionOfGoal(getSearchLocation());
 		inspectNeighborNodes();
 
 		if(getFringe().size() > 1) {
@@ -106,7 +103,7 @@ public abstract class InformedSearchAgent extends BotSearch {
 	/**
 	* Called when the goal has been found. Moves the bot itself.
 	*/
-	public void movementStep() {
+	@Override public void movementStep() {
 
 		// before the bot can move, it needs a path to follow - right?
 		if (pathNotCreatedYet) {

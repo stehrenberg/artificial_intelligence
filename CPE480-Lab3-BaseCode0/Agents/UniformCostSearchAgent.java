@@ -18,6 +18,8 @@ import java.lang.Math;
 */
 public class UniformCostSearchAgent extends InformedSearchAgent {
 
+	private static final int DIRECTION_PENALTY = 20;
+
 	/** Calculates the overall cost for a given node.
 	* @param inspectedNode The node that is currently inspected and is to be added to the fringe
 	* @param currentNode The current searchPosition that serves as parent to all newly inspected nodes.
@@ -28,6 +30,10 @@ public class UniformCostSearchAgent extends InformedSearchAgent {
 		int turningCost = determineTurningCost(inspectedNode);
 		int nodeCost = inspectedNode.getCost();
 		int pathCost = super.nodeCosts.containsKey(currentNode)? super.nodeCosts.get(currentNode) : 0;
+
+		int nodeDirection = determineDirection(currentNode, inspectedNode);
+		if(nodeDirection != SBFunctions.getDirectionOfGoal(currentNode))
+			pathCost += DIRECTION_PENALTY;
 
 		overallCost = overallCost + turningCost + nodeCost + pathCost;
 		return overallCost;
@@ -49,6 +55,7 @@ public class UniformCostSearchAgent extends InformedSearchAgent {
 
 			if(directionChange)
 				turningCosts = 1;
+		}
 
 		return turningCosts;
 	}

@@ -16,14 +16,20 @@ import java.lang.Math;
 * @author Stephanie Ehrenberg (sehrenbe@hm.edu)
 * @version 2015-05-19
 */
-public class AStarSearchAgent extends InformedSearchAgent {
+public class AStarSearchAgent extends UniformCostSearchAgent {
 
-	/** Calculates the cost for a given node. With GreedySearch, those are only calculated from the
-	* distance to the goal.
+	/** Calculates the cost for a given node. With A* Search, those are calculated from the
+	* distance to the goal as well as the path taken up to the current search location.
 	* @param inspectedNode The node that is currently inspected and is to be added to the fringe
 	* @param searchPosition The current searchPosition that serves as parent to all newly inspected nodes.
 	*/
 	protected int calculateCost(Node inspectedNode, Node searchPosition) {
-		return SBFunctions.getDistanceToGoal(getSearchLocation());
+
+		int totalCosts = SBFunctions.getDistanceToGoal(getSearchLocation());
+
+		if(searchPosition != getStartingLocation())
+			totalCosts += super.calculateCost(inspectedNode, searchPosition);
+
+		return totalCosts;
 	}
 }
