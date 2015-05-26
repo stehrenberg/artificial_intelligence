@@ -12,9 +12,9 @@ import java.util.*;
 import java.lang.Math;
 
 /**
-* Implements the A* Search Algorithm.
-* @author Stephanie Ehrenberg (sehrenbe@hm.edu)
-* @version 2015-05-19
+* Implements the A* Search Algorithm, a derivation of UCS and BFS and thus derived from UFS.
+* @author Stephanie Ehrenberg (sehrenbe@hm.edu / Moodle: "sehrenbe")
+* @version 2015-05-26
 */
 public class AStarSearchAgent extends UniformCostSearchAgent {
 

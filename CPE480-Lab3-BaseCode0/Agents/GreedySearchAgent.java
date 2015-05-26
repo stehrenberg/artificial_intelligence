@@ -12,9 +12,9 @@ import java.util.*;
 import java.lang.Math;
 
 /**
-* Implements the Greedy Search Algorithm.
-* @author Stephanie Ehrenberg (sehrenbe@hm.edu)
-* @version 2015-05-19
+* Implements the BestFirst Search Algorithm.
+* @author Stephanie Ehrenberg (sehrenbe@hm.edu / Moodle: "sehrenbe")
+* @version 2015-05-26
 */
 public class GreedySearchAgent extends InformedSearchAgent {
 

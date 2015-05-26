@@ -12,9 +12,9 @@ import java.util.*;
 import java.lang.Math;
 
 /**
-*
-* @author Stephanie Ehrenberg (sehrenbe@hm.edu)
-* @version 2015-05-16
+* ABC for informed search approaches such as BFS and A*.
+* @author Stephanie Ehrenberg (sehrenbe@hm.edu / Moodle: "sehrenbe")
+* @version 2015-05-26
 */
 public abstract class InformedSearchAgent extends BotSearch {
 

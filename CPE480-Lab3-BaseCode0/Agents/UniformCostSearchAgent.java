@@ -12,12 +12,13 @@ import java.util.*;
 import java.lang.Math;
 
 /**
-*
-* @author Stephanie Ehrenberg (sehrenbe@hm.edu)
-* @version 2015-05-16
+* Implements the Uniform Cost search approach.
+* @author Stephanie Ehrenberg (sehrenbe@hm.edu / Moodle: "sehrenbe")
+* @version 2015-05-26
 */
 public class UniformCostSearchAgent extends InformedSearchAgent {
 
+	/** Penalty that is added to the path cost if the node does not lie in the goal's direction. */
 	private static final int DIRECTION_PENALTY = 30;
 
 	/** Calculates the overall cost for a given node.
