@@ -18,7 +18,7 @@ import java.lang.Math;
 */
 public class UniformCostSearchAgent extends InformedSearchAgent {
 
-	private static final int DIRECTION_PENALTY = 20;
+	private static final int DIRECTION_PENALTY = 30;
 
 	/** Calculates the overall cost for a given node.
 	* @param inspectedNode The node that is currently inspected and is to be added to the fringe
